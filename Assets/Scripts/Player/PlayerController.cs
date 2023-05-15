@@ -16,18 +16,18 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private float jumpForce = 10;
     [SerializeField] private float gravity = -20;
 
-    private void Start()
+    private void Awake()
     {
         controller = GetComponent<CharacterController>();
         playerAnimation = GetComponent<PlayerAnimation>();
     }
-
+    /*
     private void FixedUpdate()
     {
-        if(gameManager.CurrentState == GameState.Play)
+        if (gameManager.CurrentState == GameState.Play)
             ChangeLane();
     }
-
+    */
     private void Update()
     {
         if (gameManager.CurrentState == GameState.Start)
@@ -35,33 +35,12 @@ public class PlayerController : MonoBehaviour
         else if (gameManager.CurrentState == GameState.Play)
         {
             InputController();
-            //ChangeLane();
-        }
-    }
-
-    private void OnControllerColliderHit(ControllerColliderHit hit)
-    {
-        if (hit.collider.CompareTag("Obstacle"))
-        {
-            if(gameManager.CurrentState != GameState.GameOver)
-            {
-                playerAnimation.AnimationDead();
-                gameManager.ChangeState(GameState.GameOver);
-            }
-        }
-
-        if (hit.collider.CompareTag("UnderConstruction"))
-        {
-            if (gameManager.CurrentState != GameState.Start)
-            {
-                playerAnimation.AnimationIdle();
-                gameManager.ChangeState(GameState.Start);
-            }
+            ChangeLane();
         }
     }
 
     private void InputController()
-    {      
+    {
         if (Input.GetKeyDown(KeyCode.D))
         {
             currentLane++;
@@ -108,8 +87,29 @@ public class PlayerController : MonoBehaviour
         direction.x = (targetPosition - transform.position).normalized.x * sideSpeed;
         direction.z = forwardSpeed;
         controller.Move(direction * Time.fixedDeltaTime);
-            
-        if(controller.isGrounded)
+
+        if (controller.isGrounded)
             playerAnimation.AnimationRun();
+    }
+
+    private void OnControllerColliderHit(ControllerColliderHit hit)
+    {
+        if (hit.collider.CompareTag("Obstacle"))
+        {
+            if (gameManager.CurrentState != GameState.GameOver)
+            {
+                playerAnimation.AnimationDead();
+                gameManager.ChangeState(GameState.GameOver);
+            }
+        }
+
+        if (hit.collider.CompareTag("UnderConstruction"))
+        {
+            if (gameManager.CurrentState != GameState.Start)
+            {
+                playerAnimation.AnimationIdle();
+                gameManager.ChangeState(GameState.Start);
+            }
+        }
     }
 }
