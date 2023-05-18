@@ -8,6 +8,8 @@ public class Coins : MonoBehaviour
 
     private void GetCoin()
     {
+        CoinManager.Instance.AddCoins(coinValue);
+        GameManager.Instance.CoinsEarnedLevel += coinValue;
         gameObject.SetActive(false);
         Destroy(gameObject);
     }

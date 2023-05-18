@@ -9,7 +9,7 @@ public class PlayerController : MonoBehaviour
     private Vector3 direction;
     [SerializeField] private float forwardSpeed = 10;
     [SerializeField] private float sideSpeed = 15;
-    [SerializeField] private GameManager gameManager;
+    //[SerializeField] private GameManager gameManager;
 
     private int currentLane = 1;
     [SerializeField] private float laneDistance = 2.7f;
@@ -30,9 +30,9 @@ public class PlayerController : MonoBehaviour
     */
     private void Update()
     {
-        if (gameManager.CurrentState == GameState.Start)
+        if (GameManager.Instance.CurrentState == GameState.Start)
             playerAnimation.AnimationIdle();
-        else if (gameManager.CurrentState == GameState.Play)
+        else if (GameManager.Instance.CurrentState == GameState.Play)
         {
             InputController();
             ChangeLane();
@@ -96,19 +96,19 @@ public class PlayerController : MonoBehaviour
     {
         if (hit.collider.CompareTag("Obstacle"))
         {
-            if (gameManager.CurrentState != GameState.GameOver)
+            if (GameManager.Instance.CurrentState != GameState.GameOver)
             {
                 playerAnimation.AnimationDead();
-                gameManager.ChangeState(GameState.GameOver);
+                GameManager.Instance.ChangeState(GameState.GameOver);
             }
         }
 
         if (hit.collider.CompareTag("UnderConstruction"))
         {
-            if (gameManager.CurrentState != GameState.Start)
+            if (GameManager.Instance.CurrentState != GameState.Start)
             {
                 playerAnimation.AnimationIdle();
-                gameManager.ChangeState(GameState.Start);
+                GameManager.Instance.ChangeState(GameState.Start);
             }
         }
     }
