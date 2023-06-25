@@ -4,14 +4,8 @@ using UnityEngine;
 
 public class LevelManager : MonoBehaviour
 {
-    [SerializeField] private int InitBlocks = 5;
-    [SerializeField] private int maxWagonsBlocks = 5;
-    [SerializeField] private int maxTrainsBlocks = 10;
-    [SerializeField] private int maxResetTrainsBlocks = 2;
-
     [SerializeField] private Blocks initBlock;
-    [SerializeField] private int normalBlockLength = 40;
-    [SerializeField] private int trainBlockLength = 40;
+    [SerializeField] private LevelData m_levelData;  
     [SerializeField] private Blocks[] blocks;
 
     private List<Blocks> normalBlocksList = new List<Blocks>();
@@ -33,7 +27,7 @@ public class LevelManager : MonoBehaviour
         FillBlocks();
         lastBlock = initBlock;
 
-        for(int i = 0; i < InitBlocks; i++)
+        for(int i = 0; i < m_levelData.InitBlocks; i++)
         {
             CreateBlock();
         }
@@ -41,41 +35,41 @@ public class LevelManager : MonoBehaviour
 
     private void CreateBlock()
     {
-        if(createdBlocks >= maxTrainsBlocks)
+        if(createdBlocks >= m_levelData.maxTrainsBlocks)
         {
-            if(createdBlocks < maxTrainsBlocks + 1)
+            if(createdBlocks < m_levelData.maxTrainsBlocks + 1)
             {
-                AddBlock(BlockType.Trains, normalBlockLength);
+                AddBlock(BlockType.Trains, m_levelData.normalBlockLength);
             }
             else
             {
-                AddBlock(BlockType.Trains, trainBlockLength);
+                AddBlock(BlockType.Trains, m_levelData.trainBlockLength);
             }
 
-            if(createdBlocks == maxTrainsBlocks + maxResetTrainsBlocks)
+            if(createdBlocks == m_levelData.maxTrainsBlocks + m_levelData.maxResetTrainsBlocks)
             {
                 createdBlocks = 0;
             }
         }
-        else if(createdBlocks >= maxWagonsBlocks)
+        else if(createdBlocks >= m_levelData.maxWagonsBlocks)
         {
-            AddBlock(BlockType.Wagons, normalBlockLength);
+            AddBlock(BlockType.Wagons, m_levelData.normalBlockLength);
         }
         else
         {
-            if(createdBlocks == maxWagonsBlocks - 1)
+            if(createdBlocks == m_levelData.maxWagonsBlocks - 1)
             {
-                AddBlock(BlockType.Normal, normalBlockLength, true);
+                AddBlock(BlockType.Normal, m_levelData.normalBlockLength, true);
             }
             else
             {
                 if(lastBlock.BlockTypes == BlockType.Trains)
                 {
-                    AddBlock(BlockType.Normal, trainBlockLength);
+                    AddBlock(BlockType.Normal, m_levelData.trainBlockLength);
                 }
                 else
                 {
-                    AddBlock(BlockType.Normal, normalBlockLength);
+                    AddBlock(BlockType.Normal, m_levelData.normalBlockLength);
                 }
             }
         }
@@ -160,6 +154,7 @@ public class LevelManager : MonoBehaviour
 
     private void AddNewBlockRequest()
     {
+        Debug.Log("Create new front block");
         CreateBlock();
     }
 

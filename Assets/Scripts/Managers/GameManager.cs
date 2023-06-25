@@ -12,6 +12,7 @@ public enum GameState
 
 public class GameManager : Singleton<GameManager>
 {
+    public static event Action MagnetEventEnd;
     public static event Action<GameState> GameStateEvent;
     
     [SerializeField] private int speedWorld = 5;
@@ -52,6 +53,17 @@ public class GameManager : Singleton<GameManager>
         }
     }
 
+    public void InitScoreBooster(float time)
+    {
+        StartCoroutine(COScoreBooster(time));
+    }
+
+    private IEnumerator COScoreBooster(float time)
+    {
+        yield return new WaitForSeconds(time);
+        MultiplierValue = 1;
+    }
+
     private void UpdateBestScore()
     {
         if(Score > bestScoreCheck)
@@ -68,13 +80,26 @@ public class GameManager : Singleton<GameManager>
         }
     }
 
+    private IEnumerator COMagnetBooster(float time)
+    {
+        yield return new WaitForSeconds(time);
+        MagnetEventEnd?.Invoke();
+    }
+
+    private void MagnetEventResponse(float durationTime)
+    {
+        StartCoroutine(COMagnetBooster(durationTime));
+    }
+
     private void OnEnable()
     {
         GameStateEvent += StateChangeEventResponse;
+        MagnetBooster.MagnetEvent += MagnetEventResponse;
     }
 
     private void OnDisable()
     {
         GameStateEvent -= StateChangeEventResponse;
+        MagnetBooster.MagnetEvent -= MagnetEventResponse;
     }
 }

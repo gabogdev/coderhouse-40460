@@ -42,12 +42,14 @@ public class UIManager : MonoBehaviour
 
     public void Play()
     {
+        SoundManager.Instance.PlaySoundFX(SoundManager.Instance.uiClip);
         startMenuPanel.SetActive(false);
         GameManager.Instance.ChangeState(GameState.Play);
     }
 
     public void Retry()
     {
+        SoundManager.Instance.PlaySoundFX(SoundManager.Instance.uiClip);
         SceneManager.LoadScene(SceneManager.GetActiveScene().name);
     }
 

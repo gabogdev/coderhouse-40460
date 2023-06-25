@@ -7,27 +7,16 @@ public class PlayerController : MonoBehaviour
     private CharacterController controller;
     private PlayerAnimation playerAnimation;
     private Vector3 direction;
-    [SerializeField] private float forwardSpeed = 10;
-    [SerializeField] private float sideSpeed = 15;
-    //[SerializeField] private GameManager gameManager;
-
     private int currentLane = 1;
-    [SerializeField] private float laneDistance = 2.7f;
-    [SerializeField] private float jumpForce = 10;
-    [SerializeField] private float gravity = -20;
+
+    [SerializeField] private PlayerData m_data;
 
     private void Awake()
     {
         controller = GetComponent<CharacterController>();
         playerAnimation = GetComponent<PlayerAnimation>();
     }
-    /*
-    private void FixedUpdate()
-    {
-        if (gameManager.CurrentState == GameState.Play)
-            ChangeLane();
-    }
-    */
+
     private void Update()
     {
         if (GameManager.Instance.CurrentState == GameState.Start)
@@ -59,13 +48,14 @@ public class PlayerController : MonoBehaviour
         {
             if (Input.GetKeyDown(KeyCode.Space))
             {
-                direction.y = jumpForce;
+                SoundManager.Instance.PlaySoundFX(SoundManager.Instance.jumpClip);
+                direction.y = m_data.jumpForce;
                 playerAnimation.AnimationJump();
             }
         }
         else
         {
-            direction.y += gravity * Time.deltaTime;
+            direction.y += m_data.gravity * Time.deltaTime;
         }
     }
 
@@ -76,16 +66,16 @@ public class PlayerController : MonoBehaviour
         switch (currentLane)
         {
             case 0:
-                targetPosition += Vector3.left * laneDistance;
+                targetPosition += Vector3.left * m_data.laneDistance;
                 break;
 
             case 2:
-                targetPosition += Vector3.right * laneDistance;
+                targetPosition += Vector3.right * m_data.laneDistance;
                 break;
         }
 
-        direction.x = (targetPosition - transform.position).normalized.x * sideSpeed;
-        direction.z = forwardSpeed;
+        direction.x = (targetPosition - transform.position).normalized.x * m_data.sideSpeed;
+        direction.z = m_data.forwardSpeed;
         controller.Move(direction * Time.fixedDeltaTime);
 
         if (controller.isGrounded)
@@ -98,18 +88,19 @@ public class PlayerController : MonoBehaviour
         {
             if (GameManager.Instance.CurrentState != GameState.GameOver)
             {
+                SoundManager.Instance.PlaySoundFX(SoundManager.Instance.colisionClip);
                 playerAnimation.AnimationDead();
                 GameManager.Instance.ChangeState(GameState.GameOver);
             }
         }
 
-        if (hit.collider.CompareTag("UnderConstruction"))
-        {
-            if (GameManager.Instance.CurrentState != GameState.Start)
-            {
-                playerAnimation.AnimationIdle();
-                GameManager.Instance.ChangeState(GameState.Start);
-            }
-        }
+        //if (hit.collider.CompareTag("UnderConstruction"))
+        //{
+        //    if (GameManager.Instance.CurrentState != GameState.Start)
+        //    {
+        //        playerAnimation.AnimationIdle();
+        //        GameManager.Instance.ChangeState(GameState.Start);
+        //    }
+        //}
     }
 }
