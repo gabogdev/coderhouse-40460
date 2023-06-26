@@ -109,6 +109,11 @@ public class LevelManager : MonoBehaviour
             }
         }
 
+        if (newBlock != null)
+        {
+            newBlock.InitBlock();
+        }
+
         return newBlock;
     }
 
@@ -154,7 +159,6 @@ public class LevelManager : MonoBehaviour
 
     private void AddNewBlockRequest()
     {
-        Debug.Log("Create new front block");
         CreateBlock();
     }
 

@@ -56,7 +56,6 @@ public class Pooler : MonoBehaviour
     {
         for (int i = 0; i < instancesCreated.Count; i++)
         {
-           
             if (instancesCreated[i].activeSelf == false)
             {
                 return instancesCreated[i];

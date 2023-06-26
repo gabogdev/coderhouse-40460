@@ -7,7 +7,7 @@ public class Coins : MonoBehaviour
     [SerializeField] private int coinValue = 1;
     [SerializeField] private float colliderNewSize = 5f;
     [SerializeField] private float minDistancePlayer = 1.5f;
-    [SerializeField] private float moveSpeed = 10f;
+    [SerializeField] private float moveSpeed = 12f;
 
     public Transform Player { get; set; }
 
@@ -37,7 +37,6 @@ public class Coins : MonoBehaviour
         CoinManager.Instance.AddCoins(coinValue);
         GameManager.Instance.CoinsEarnedLevel += coinValue;
         gameObject.SetActive(false);
-        Destroy(gameObject);
     }
 
     private void MoveCoin()

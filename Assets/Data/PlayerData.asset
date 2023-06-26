@@ -15,5 +15,5 @@ MonoBehaviour:
   forwardSpeed: 6
   sideSpeed: 10
   laneDistance: 2.6
-  jumpForce: 9
+  jumpForce: 7.5
   gravity: -20

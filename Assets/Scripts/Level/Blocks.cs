@@ -30,19 +30,43 @@ public class Blocks : MonoBehaviour
     {
         GetCoins();
         ActivateCoins();
+        BoosterSelect();
+    }
+
+    private void BoosterSelect()
+    {
+        if (boosters == null || boosters.Length == 0)
+        {
+            return;
+        }
+
+        for (int i = 0; i < boosters.Length; i++)
+        {
+            boosters[i].SetActive(false);
+        }
+
+        float randomProbability = Random.Range(0f, 100f);
+
+        if (randomProbability <= minProbabilityBoost)
+        {
+            int itemRandomIndex = Random.Range(0, boosters.Length);
+            boosters[itemRandomIndex].SetActive(true);
+        }
     }
 
     private void GetCoins()
     {
-        if (!coinsReference)
+        if (coinsReference)
         {
-            foreach(GameObject parent in coins)
+            return;
+        }
+
+        foreach (GameObject parent in coins)
+        {
+            for (int j = 0; j < parent.transform.childCount; j++)
             {
-                for(int j = 0; j < parent.transform.childCount; j++)
-                {
-                    GameObject coin = parent.transform.GetChild(j).gameObject;
-                    coinsList.Add(coin);
-                }
+                GameObject coin = parent.transform.GetChild(j).gameObject;
+                coinsList.Add(coin);
             }
         }
 
@@ -51,31 +75,14 @@ public class Blocks : MonoBehaviour
 
     private void ActivateCoins()
     {
-        if(coinsList.Count != 0 || coinsList != null)
+        if(coinsList.Count == 0 || coinsList == null)
         {
-            foreach(GameObject coin in coinsList)
-            {
-                coin.SetActive(true);
-            }
+            return;
         }
-    }
 
-    private void BoosterSelect()
-    {
-        if(boosters != null || boosters.Length != 0)
+        foreach (GameObject coin in coinsList)
         {
-            for(int i = 0; i < boosters.Length; i++)
-            {
-                boosters[i].SetActive(false);
-            }
-
-            float randomProbability = Random.Range(0f, 100f);
-
-            if(randomProbability <= minProbabilityBoost)
-            {
-                int itemRandomIndex = Random.Range(0, boosters.Length);
-                boosters[itemRandomIndex].SetActive(true);
-            }
+            coin.SetActive(true);
         }
     }
 }

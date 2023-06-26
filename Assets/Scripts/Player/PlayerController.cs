@@ -30,6 +30,11 @@ public class PlayerController : MonoBehaviour
 
     private void InputController()
     {
+        if (Input.GetKeyDown(KeyCode.Escape))
+        {
+            Application.Quit();
+        }
+
         if (Input.GetKeyDown(KeyCode.D))
         {
             currentLane++;
@@ -93,14 +98,5 @@ public class PlayerController : MonoBehaviour
                 GameManager.Instance.ChangeState(GameState.GameOver);
             }
         }
-
-        //if (hit.collider.CompareTag("UnderConstruction"))
-        //{
-        //    if (GameManager.Instance.CurrentState != GameState.Start)
-        //    {
-        //        playerAnimation.AnimationIdle();
-        //        GameManager.Instance.ChangeState(GameState.Start);
-        //    }
-        //}
     }
 }
